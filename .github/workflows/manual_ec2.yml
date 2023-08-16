@@ -22,7 +22,7 @@ jobs:
     
     - name: login and pull docker image
       env:
-          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_REPO_NAME: "taltaf913/sentimentanalysis"
           DOCKER_CONTAINER_NAME: "api_docker_v2"
           DOCKER_IMG_VERSION: "0.0.1"
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -35,7 +35,7 @@ jobs:
       
     - name: delete old container
       env:
-          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_REPO_NAME: "taltaf913/sentimentanalysis"
 #          DOCKER_CONTAINER_NAME: "api_docker_v2"
           DOCKER_CONTAINER_NAME: ${{ github.event.inputs.name }}
           DOCKER_IMG_VERSION: "8.1.0"
