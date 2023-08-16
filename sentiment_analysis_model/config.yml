@@ -2,7 +2,7 @@
 package_name: sentiment_analysis
 
 # dataset file
-dataset_file_path: './datasets/reviews.csv'
+dataset_file_path: './datasets/Reviews.csv'
 not_required_features: "Id, HelpfulnessNumerator, HelpfulnessDenominator"
 
 # Data Files
