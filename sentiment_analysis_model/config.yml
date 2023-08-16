@@ -1,0 +1,39 @@
+# Package Overview
+package_name: sentiment_analysis
+
+# dataset file
+dataset_file_path: './datasets/reviews.csv'
+not_required_features: "Id, HelpfulnessNumerator, HelpfulnessDenominator"
+
+# Data Files
+train_path: train
+validation_path: validation
+test_path: test
+
+model_name: sentiment_analysis_model
+model_save_file: sentiment_analysis_output
+tokenization_save_file: sentiment_analysis_tokenization
+save_tokenizer: True
+load_existing_tokenizer: True
+
+# Feature engineering parameters
+maxlen: 150
+batch_size: 1024
+test_size: 0.20
+validation_size: 0.25
+
+clean_up_words: Text
+
+# Set the random seed
+random_state: 42
+
+# Alogrithm parameters
+epochs: 3
+optimizer: adam
+loss: binary_crossentropy
+accuracy_metric: accuracy
+verbose: 1
+earlystop: 1
+monitor: val_loss
+save_best_only: True
+

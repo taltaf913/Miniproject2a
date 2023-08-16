@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        <h1 style="background-color:LightGray;">
+            <center>Sentiment Classification</center>
+        </h1>
+    </div>
+    <div>
+        <fieldset>
+        <ul>
+            <li><span style="font-weight:bold;">Upload and predict:</span> 
+            <br><br>
+            <form action="/predict/" enctype="multipart/form-data" method="post">
+                <input name="file" type="file" onchange="readURL(this);" />
+                <br><br>
+                <button type="submit">Upload</button>
+            </form>
+            </li>
+            <br>
+        </ul>
+        </fieldset>
+    </div>
+</body>
+</html>

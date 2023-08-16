@@ -1,0 +1,18 @@
+include *.txt
+include *.md
+include *.pkl
+recursive-include ./sentiment_analysis_model *
+
+recursive-include sentiment_analysis_model/datasets *
+recursive-include sentiment_analysis_model/trained_models *
+include sentiment_analysis_model/VERSION
+include sentiment_analysis_model/config.yml
+include sentiment_analysis_model/*.json
+
+include ./requirements/requirements.txt
+include ./requirements/test_requirements.txt
+exclude *.log
+exclude *.cfg
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

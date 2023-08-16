@@ -1,0 +1,98 @@
+name: train_predict_test_docker_and_push
+
+on:
+  push:
+#    tags:
+#      - TP*
+    branches:
+      - proj_version1
+#      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 
+      uses: actions/setup-python@v4
+      with:
+         python-version: '3.10'
+         
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install -r requirements/requirements.txt
+        pip3 install pylint
+        pip3 install pytest
+
+    - name: complete-clerical-work
+      run: |
+        cd sentiment_analysis_model/trained_models
+        ls -lrt
+        echo "gunzip and untarring files"
+        gunzip sentiment_analysis_output0.0.1.tar.gz
+        tar xvf sentiment_analysis_output0.0.1.tar
+        cd ..
+        cp sentiment_analysis_tokenization0.0.1.json ..
+
+        ls -lrt
+        
+    - name: run predict 
+      run: |
+        echo "current working directory: ".$PWD
+        cd sentiment_analysis_model
+        echo "changed working directory to: ".$PWD
+        
+        # run the Predict
+        python3 predict.py 
+
+    - name: run testcases
+      run: |
+        # cd sentiment_analysis_model
+        echo "changed working directory to: ".$PWD
+        
+        # run the test-case
+        pytest -v
+
+  docker_build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Docker login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}  
+
+    - name: create sentiment_analysis_model distribution
+      run: |
+        echo "working directory to: ".$PWD
+        python3 setup.py bdist_wheel
+
+    - name: execute docker run
+      env:
+          RELEASE_NAME: "sentiment_analysis_model"
+          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_IMG_VERSION: "0.0.1"
+      run: |
+        echo "working directory to: ".$PWD
+        echo "building docker image from current folder"
+        echo "Docker repo name: ".${{ env.DOCKER_REPO_NAME }}
+        docker build -t ${{ env.DOCKER_REPO_NAME }} .
+        
+        # add latest and specific release-version to image
+        docker tag ${{ env.DOCKER_REPO_NAME }}:latest ${{ env.DOCKER_REPO_NAME }}:${{ env.DOCKER_IMG_VERSION }}
+        
+        # displaying docker images
+        docker images
+
+    - name: docker push
+      env:
+          RELEASE_NAME: "sentiment_analysis_model"
+          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_IMG_VERSION: "0.0.1"
+      run: |
+        echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}.":latest"
+        echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}:${{ env.DOCKER_IMG_VERSION }}
+        docker push ${{ env.DOCKER_REPO_NAME }}:latest 
+        docker push ${{ env.DOCKER_REPO_NAME }}:${{ env.DOCKER_IMG_VERSION }}

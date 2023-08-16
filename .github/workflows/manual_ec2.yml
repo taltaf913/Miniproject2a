@@ -1,0 +1,51 @@
+# This is a basic workflow that is manually triggered
+
+name: deploy_container_to_ec2
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'Version to deploy'
+        default: '0.0.1'
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy_image:
+    runs-on: self-hosted
+    steps:
+    
+    - name: login and pull docker image
+      env:
+          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_CONTAINER_NAME: "api_docker_v2"
+          DOCKER_IMG_VERSION: "0.0.1"
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_P: ${{ secrets.DOCKERHUB_TOKEN }} 
+          
+      run: |
+         echo "pulling docker image  - "${{ env.DOCKER_REPO_NAME }}.":latest"
+         sudo docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_P }}
+         sudo docker pull ${{ env.DOCKER_REPO_NAME }}:latest
+      
+    - name: delete old container
+      env:
+          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+#          DOCKER_CONTAINER_NAME: "api_docker_v2"
+          DOCKER_CONTAINER_NAME: ${{ github.event.inputs.name }}
+          DOCKER_IMG_VERSION: "8.1.0"
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_P: ${{ secrets.DOCKERHUB_TOKEN }} 
+      run: |         
+          if [ "$(sudo docker ps -a | grep -c ${{ env.DOCKER_CONTAINER_NAME }})" -gt 0 ]; then
+            echo ${{ env.DOCKER_CONTAINER_NAME }}." Exists."
+            sudo docker rm --force ${{ env.DOCKER_CONTAINER_NAME }} 
+          else
+            echo ${{ env.DOCKER_CONTAINER_NAME }}." does NOT Exist !!!!!" 
+          fi
+          sudo docker run -d --name  ${{ env.DOCKER_CONTAINER_NAME }} -p 8000:8000  ${{ env.DOCKER_REPO_NAME }}
