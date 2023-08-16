@@ -72,7 +72,7 @@ jobs:
     - name: execute docker run
       env:
           RELEASE_NAME: "sentiment_analysis_model"
-          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_REPO_NAME: "taltaf913/sentimentanalysis"
           DOCKER_IMG_VERSION: "0.0.1"
       run: |
         echo "working directory to: ".$PWD
@@ -89,7 +89,7 @@ jobs:
     - name: docker push
       env:
           RELEASE_NAME: "sentiment_analysis_model"
-          DOCKER_REPO_NAME: "mphaniram/sentimentanalysis"
+          DOCKER_REPO_NAME: "taltaf913/sentimentanalysis"
           DOCKER_IMG_VERSION: "0.0.1"
       run: |
         echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}.":latest"
