@@ -2,11 +2,9 @@ name: train_predict_test_docker_and_push
 
 on:
   push:
-#    tags:
-#      - TP*
     branches:
-      - proj_version1
-#      - development
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
