@@ -60,7 +60,7 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASS_TOKEN }}
-      run: docker login -u $DOCKER_USER_NAME -p $DOCKER_PASSWORD
+      run: docker login -u $DOCKER_USER_NAME -p $DOCKER_PASSWORD --password-stdin
 
     - name: create sentiment_analysis_model distribution
       run: |
