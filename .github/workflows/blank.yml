@@ -90,7 +90,7 @@ jobs:
           DOCKER_REPO_NAME: "tmahammad913/sentimentanalysis"
           DOCKER_IMG_VERSION: "0.0.1"
       run: |
-        echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}.":latest"
+        echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}":latest"
         echo "pushing docker image  - ".${{ env.DOCKER_REPO_NAME }}:${{ env.DOCKER_IMG_VERSION }}
         docker push ${{ env.DOCKER_REPO_NAME }}:latest 
         docker push ${{ env.DOCKER_REPO_NAME }}:${{ env.DOCKER_IMG_VERSION }}
